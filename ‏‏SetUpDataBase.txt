@@ -1,0 +1,84 @@
+STEP 1 : execute the sql script, in Microsoft SQL Server
+STEP 2 : in Web.config file, insert the connection string
+
+
+---------------------------------------------------------------------------------------------
+------------------------------------------ SQL --------------------------------------------
+---------------------------------------------------------------------------------------------
+
+create database dbAspNetWebApiStudentsService
+go
+
+use dbAspNetWebApiStudentsService
+go
+
+create table tblStudents
+(
+	Id int primary key identity,
+	FirstName nvarchar(50),
+	LastName nvarchar(50),
+	Gender nvarchar(50),
+	City nvarchar(50),
+	BirthYear int
+)
+go
+
+insert into tblStudents values ('fn1','ln1','male','city1',1998)
+insert into tblStudents values ('fn2','ln2','female','city2',1999)
+insert into tblStudents values ('fn3','ln3','male','city3',2000)
+insert into tblStudents values ('fn4','ln4','female','city4',2001)
+go
+
+create procedure spGetAllStudents
+as
+begin
+	select * from tblStudents
+end
+go
+
+create procedure spGetStudentById
+@Id int
+as
+begin
+	select * from tblStudents
+	where Id = @Id
+end
+go
+
+create procedure spAddStudent
+@FirstName nvarchar(50),
+@LastName nvarchar(50),
+@Gender nvarchar(50),
+@City nvarchar(50),
+@BirthYear int
+as
+begin
+	insert into tblStudents values
+	(@FirstName, @LastName, @Gender,
+	@City, @BirthYear)
+	select SCOPE_IDENTITY()
+end
+go
+
+create procedure spUpdateStudent
+@Id int,
+@FirstName nvarchar(50),
+@LastName nvarchar(50),
+@Gender nvarchar(50),
+@City nvarchar(50),
+@BirthYear int
+as
+begin
+	update tblStudents set FirstName = @FirstName, LastName = @LastName,
+	Gender = @Gender, City = @City, BirthYear = @BirthYear
+	where Id = @Id
+end
+go
+
+create procedure spDeleteStudent
+@Id int
+as
+begin
+	delete tblStudents where Id = @Id
+end
+go
